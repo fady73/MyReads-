@@ -18,6 +18,7 @@ class Search extends Component {
     	searchQuery: ""
     }
     searchQuery = (query) => {
+      console.log(query)
     	this.setState({searchQuery: query,allSelectedBooks:this.props.allBooks}, this.searchBooks)
     }
    rememberShelfs(result){
@@ -31,8 +32,10 @@ class Search extends Component {
     searchBooks() {
     	if(this.state.searchQuery === '' || this.state.searchQuery === undefined) {
     		return this.setState({ results: [] })
-    	}
-    	BookApi.search(this.state.searchQuery.trim())
+      }
+      if(this.state.searchQuery.trim().length>0)
+      {    	
+      BookApi.search(this.state.searchQuery.trim())
     	.then(result => {
     		if(result.error) {
     			return this.setState({ results: [] })
@@ -41,7 +44,8 @@ class Search extends Component {
           this.rememberShelfs(result);
         }
     		this.setState({results: result})
-    	})
+      })
+    }
     }
   
 
@@ -61,7 +65,8 @@ class Search extends Component {
                 you don't find a specific author or title. Every search is limited by search terms.
                 */}
             <input type="text" placeholder="Search by title or author" value={this.state.searchQuery}
-                	onChange={(event) => this.searchQuery(event.target.value)} />
+                	onChange={(event) => {  
+                  this.searchQuery(event.target.value)}} />
 
           </div>
         </div>
